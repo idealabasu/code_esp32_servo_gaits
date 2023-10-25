@@ -24,23 +24,10 @@ template = '''
 </html>
 '''
 
-redirect_template = '''
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="UTF-8" http-equiv="refresh" content=".5; url='/'" />
-  </head>
-  <body>
-    <p>Success</p>
-  </body>
-</html>'''
-
-
 import uasyncio
 from microdot_asyncio import Microdot, Response, send_file
 from microdot_utemplate import render_template
 
-# setup webserver
 app = Microdot()
 
 Response.default_content_type = 'text/html'
@@ -49,7 +36,7 @@ Response.socket_read_timeout =0
 @app.route('/')
 async def index(request):
     html = template.format(led_value= led.value(),frequency=time_based_servo.f, amplitude=time_based_servo.A, offset = time_based_servo.b, l0=time_based_servo.l1, l1 = time_based_servo.l2, l2 = time_based_servo.l3, l3 = time_based_servo.l4)
-    return html#, 200, {'Content-Type': 'text/html'}
+    return html
 
 
 from machine import Pin
@@ -101,9 +88,8 @@ async def servo(request):
     set_l1((request.args['l1']))
     set_l2((request.args['l2']))
     set_l3((request.args['l3']))
-    # html = redirect_template
     html = template.format(led_value= led.value(),frequency=time_based_servo.f, amplitude=time_based_servo.A, offset = time_based_servo.b, l0=time_based_servo.l1, l1 = time_based_servo.l2, l2 = time_based_servo.l3, l3 = time_based_servo.l4)
-    return html#, 202, {'Content-Type': 'text/html'}
+    return html
 
 def start_server():
     print('Starting microdot app')
@@ -111,5 +97,3 @@ def start_server():
         app.run(port=80)
     except:
         app.shutdown()
-
-# start_server()
