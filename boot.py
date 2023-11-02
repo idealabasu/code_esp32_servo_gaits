@@ -43,7 +43,10 @@ else:
     print(station.ifconfig())
 
 
-if not os.path.exists('lib/microdot.py'):
+try:
+    os.rename('lib/microdot.py','lib/microdot.py')
+except:
+              
 
     import mip
 
