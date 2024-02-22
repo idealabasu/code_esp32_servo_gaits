@@ -25,8 +25,8 @@ template = '''
 '''
 
 import uasyncio
-from microdot_asyncio import Microdot, Response, send_file
-from microdot_utemplate import render_template
+from microdot import Microdot, Response, send_file
+# from microdot_utemplate import render_template
 
 app = Microdot()
 

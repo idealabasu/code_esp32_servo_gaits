@@ -5,6 +5,7 @@
 import os
 import sys
 import esp
+from secrets import *
 
 esp.osdebug(esp.LOG_DEBUG)
 
@@ -13,11 +14,11 @@ gc.collect()
 
 import network
 
-AP = False
+AP = True
 
 if AP:
-    ssid = 'MicroPython-AP'
-    password = '123456789'
+    ssid = 'SCRAM'
+    password = ''
     station = network.WLAN(network.AP_IF)
     station.active(True)
     station.config(essid=ssid, password=password)
@@ -27,8 +28,8 @@ if AP:
     print('Connection successful')
     print(station.ifconfig())
 else:   
-    ssid = '<put_in_your_SSID>'
-    password = '<put_in_your_password>'
+    ssid = MY_SSID
+    password = MY_PW
     station = network.WLAN(network.STA_IF)
     station.active(True)
 
@@ -51,7 +52,7 @@ except:
     import mip
 
     mip.install('https://github.com/miguelgrinberg/microdot/raw/main/src/microdot.py')
-    mip.install('https://github.com/miguelgrinberg/microdot/raw/main/src/microdot_asyncio.py')
+    # mip.install('https://github.com/miguelgrinberg/microdot/raw/main/src/microdot_asyncio.py')
     mip.install('https://github.com/miguelgrinberg/microdot/raw/main/src/microdot_utemplate.py')
 
 
