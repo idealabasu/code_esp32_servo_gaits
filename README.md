@@ -14,8 +14,6 @@ Here's how to get it running:
 1. Open up the project and define an internet-connected wifi access point to connect to (for the first time).
 1. Upload the project to the microcvontroller and reset the ESP.
 
-> I have tutorials for each of these steps.  Please reach out if you would like more details.
-
 The ESP, when started up, will download a couple libraries from the internet and then soft reset itself. Once restarted, it will host a webpage at its ip address.  You can use the page to control various aspects of the servos.
 
 > Once the libraries are downloaded, you can also reprogram the ```boot.py``` file so that the ESP acts as its own wifi-access point.
