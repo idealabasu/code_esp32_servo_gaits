@@ -1,7 +1,6 @@
 import os
 import sys
 import esp
-import get_libs
 
 esp.osdebug(esp.LOG_DEBUG)
 
@@ -10,7 +9,7 @@ gc.collect()
 
 import network
 
-AP = True
+AP = False
 
 if AP:
     ssid = 'SCRAM' # Change this if you are working in a classroom
@@ -36,13 +35,9 @@ else:
         station.connect(MY_SSID, MY_PW)
 
     print('connecting to :',MY_SSID)
+
     while station.isconnected() == False:
         pass
 
     print('Connection successful')
     print(station.ifconfig())
-
-    try:
-        os.rename('lib/microdot.py','lib/microdot.py')
-    except:
-        get_libs.download_microdot()

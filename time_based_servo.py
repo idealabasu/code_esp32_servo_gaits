@@ -52,4 +52,4 @@ async def update_servo_loop():
         # print(ii)
         ii+=1
         update_servos()
-        await asyncio.sleep(0.01)
+        await asyncio.sleep(0.1)
