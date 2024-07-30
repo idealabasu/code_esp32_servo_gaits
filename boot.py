@@ -25,8 +25,8 @@ if AP:
 
 else:   
 
-    MY_SSID = '<fill this in>' 
-    MY_PW = '<fill this in>'
+    MY_SSID = 'senorita-fussy-bubbles' 
+    MY_PW = 'ic5D4CHJV0X3'
 
     station = network.WLAN(network.STA_IF)
     station.active(True)
@@ -41,3 +41,9 @@ else:
 
     print('Connection successful')
     print(station.ifconfig())
+
+# import logging
+
+# logging.basicConfig(level=logging.INFO)
+# logger = logging.getLogger(__name__)
+# logger.info(str(station.ifconfig()))

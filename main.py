@@ -1,4 +1,6 @@
-
+# import logging
+# logger = logging.getLogger(__name__)
+import gc
 import uasyncio as asyncio
 import time_based_servo
 # Complete project details at https://RandomNerdTutorials.com
@@ -6,11 +8,21 @@ import time_based_servo
 # https://randomnerdtutorials.com/micropython-oled-display-esp32-esp8266/
 
 
-from machine import Pin, SoftI2C
 import machine
+from machine import Pin
+from machine import SoftI2C
 import time
-import bno055
-import bno055.bno055
+
+import micropython
+
+# logger.info(str(micropython.mem_info()))
+
+
+# logger.info(str(micropython.mem_info()))
+print(micropython.mem_info())
+gc.collect()
+# logger.info(str(micropython.mem_info()))
+print(micropython.mem_info())
 
 import microdot
 import microdot.microdot
@@ -60,97 +72,94 @@ app = microdot.microdot.Microdot()
 microdot.microdot.Response.default_content_type = 'text/html'
 microdot.microdot.Response.socket_read_timeout =0
 
-@app.route('/')
-async def index(request):
-    html = template.format(led_value= led.value(),frequency=time_based_servo.f, amplitude=time_based_servo.A, offset = time_based_servo.b, l0=time_based_servo.l1, l1 = time_based_servo.l2, l2 = time_based_servo.l3, l3 = time_based_servo.l4)
-    return html
-
-# app = microdot.microdot.Microdot()
-
-# microdot.microdot.Response.default_content_type = 'text/html'
-
-# # root route
 # @app.route('/')
 # async def index(request):
-#     return Template('index.html').render()
+#     html = template.format(led_value= led.value(),frequency=time_based_servo.f, amplitude=time_based_servo.A, offset = time_based_servo.b, l0=time_based_servo.l1, l1 = time_based_servo.l2, l2 = time_based_servo.l3, l3 = time_based_servo.l4)
+#     return html
+
+# root route
+@app.route('/')
+async def index(request):
+    return microdot.utemplate.Template('index.html').render()
 
 
 
-# @app.route('/ws')
-# @microdot.websocket.with_websocket
-# async def read_sensor(request, ws):
-#     while True:
-# #         data = await ws.receive()
-#         time.sleep(.1)
-#         try:
-#             await ws.send(str(ldr.get_light_percentage()))
-#         except ConnectionResetError:
-#             print("connection lost")
+@app.route('/ws')
+@microdot.websocket.with_websocket
+async def read_sensor(request, ws):
+    while True:
+#         data = await ws.receive()
+        time.sleep(.1)
+        try:
+            await ws.send(str(time.time()))
+            # print('test')
+        except ConnectionResetError:
+            print("connection lost")
 
-# # Static CSS/JSS
-# @app.route("/static/<path:path>")
-# def static(request, path):
-#     if ".." in path:
-#         # directory traversal is not allowed
-#         return "Not found", 404
-#     return send_file("static/" + path)
-
-
-# # shutdown
-# @app.get('/shutdown')
-# def shutdown(request):
-#     request.app.shutdown()
-#     return 'The server is shutting down...'
+# Static CSS/JSS
+@app.route("/static/<path:path>")
+def static(request, path):
+    if ".." in path:
+        # directory traversal is not allowed
+        return "Not found", 404
+    return microdot.microdot.send_file("static/" + path)
 
 
-led = Pin(2, Pin.OUT)
-
-def set_servo(value):
-    led.value(int(value))
-
-    print('setting servo value: ',value)
-
-def set_frequency(value):
-    time_based_servo.f = float(value)
-    print('setting f: ',value)
-
-def set_amplitude(value):
-    time_based_servo.A = float(value)
-    print('setting f: ',value)
-
-def set_offset(value):
-    time_based_servo.b = float(value)
-    print('setting f: ',value)
-
-def set_l0(value):
-    time_based_servo.l1 = float(value)
-    print('setting f: ',value)
-
-def set_l1(value):
-    time_based_servo.l2 = float(value)
-    print('setting f: ',value)
-
-def set_l2(value):
-    time_based_servo.l3 = float(value)
-    print('setting f: ',value)
-
-def set_l3(value):
-    time_based_servo.l4 = float(value)
-    print('setting f: ',value)
+# shutdown
+@app.get('/shutdown')
+def shutdown(request):
+    request.app.shutdown()
+    return 'The server is shutting down...'
 
 
-@app.get('/test')
-async def servo(request):
-    set_servo((int(request.args['servoval'])))
-    set_frequency((request.args['frequency']))
-    set_amplitude((request.args['amplitude']))
-    set_offset((request.args['offset']))
-    set_l0((request.args['l0']))
-    set_l1((request.args['l1']))
-    set_l2((request.args['l2']))
-    set_l3((request.args['l3']))
-    html = template.format(led_value= led.value(),frequency=time_based_servo.f, amplitude=time_based_servo.A, offset = time_based_servo.b, l0=time_based_servo.l1, l1 = time_based_servo.l2, l2 = time_based_servo.l3, l3 = time_based_servo.l4)
-    return html
+# led = Pin(2, Pin.OUT)
+
+# def set_servo(value):
+#     led.value(int(value))
+
+#     print('setting servo value: ',value)
+
+# def set_frequency(value):
+#     time_based_servo.f = float(value)
+#     print('setting f: ',value)
+
+# def set_amplitude(value):
+#     time_based_servo.A = float(value)
+#     print('setting f: ',value)
+
+# def set_offset(value):
+#     time_based_servo.b = float(value)
+#     print('setting f: ',value)
+
+# def set_l0(value):
+#     time_based_servo.l1 = float(value)
+#     print('setting f: ',value)
+
+# def set_l1(value):
+#     time_based_servo.l2 = float(value)
+#     print('setting f: ',value)
+
+# def set_l2(value):
+#     time_based_servo.l3 = float(value)
+#     print('setting f: ',value)
+
+# def set_l3(value):
+#     time_based_servo.l4 = float(value)
+#     print('setting f: ',value)
+
+
+# @app.get('/test')
+# async def servo(request):
+#     set_servo((int(request.args['servoval'])))
+#     set_frequency((request.args['frequency']))
+#     set_amplitude((request.args['amplitude']))
+#     set_offset((request.args['offset']))
+#     set_l0((request.args['l0']))
+#     set_l1((request.args['l1']))
+#     set_l2((request.args['l2']))
+#     set_l3((request.args['l3']))
+#     html = template.format(led_value= led.value(),frequency=time_based_servo.f, amplitude=time_based_servo.A, offset = time_based_servo.b, l0=time_based_servo.l1, l1 = time_based_servo.l2, l2 = time_based_servo.l3, l3 = time_based_servo.l4)
+#     return html
 
 def start_server():
     print('Starting microdot app')
@@ -159,29 +168,24 @@ def start_server():
     except:
         app.shutdown()
 
+# logger.info('getting down to servo task')
 
-servo_task = asyncio.create_task(time_based_servo.update_servo_loop())
+# servo_task = asyncio.create_task(time_based_servo.update_servo_loop())
+    
+
+async def check_time():
+    ii = 0
+    while True:
+        # print(ii)
+        ii+=1
+        await asyncio.sleep(0.5)
+
+# time_task = asyncio.create_task(check_time())
+
 
 # i2c = SoftI2C(scl=Pin(33), sda=Pin(32))
 
-# imu = bno055.bno055.BNO055(i2c)
-
-# async def read_imu():
-#     calibrated = False
-#     while True:
-#         if not calibrated:
-#             calibrated = imu.calibrated()
-#             print('Calibration required: sys {} gyro {} accel {} mag {}'.format(*imu.cal_status()))
-#         print('Temperature {}°C'.format(imu.temperature()))
-#         print('Mag       x {:5.0f}    y {:5.0f}     z {:5.0f}'.format(*imu.mag()))
-#         print('Gyro      x {:5.0f}    y {:5.0f}     z {:5.0f}'.format(*imu.gyro()))
-#         print('Accel     x {:5.1f}    y {:5.1f}     z {:5.1f}'.format(*imu.accel()))
-#         print('Lin acc.  x {:5.1f}    y {:5.1f}     z {:5.1f}'.format(*imu.lin_acc()))
-#         print('Gravity   x {:5.1f}    y {:5.1f}     z {:5.1f}'.format(*imu.gravity()))
-#         print('Heading     {:4.0f} roll {:4.0f} pitch {:4.0f}'.format(*imu.euler()))
-#         await asyncio.sleep(0.1)
-
-# imu_task = asyncio.create_task(read_imu())
+# logger.info('starting app')
 
 start_server()
 
