@@ -9,12 +9,13 @@ gc.collect()
 
 import network
 
-AP = False
+AP = True
 
 if AP:
-    ssid = 'SCRAM' # Change this if you are working in a classroom
-    password = ''
     station = network.WLAN(network.AP_IF)
+    mac = station.config('mac')
+    ssid = 'ESP32_{0}'.format(mac.hex()) # Change this if you are working in a classroom
+    password = ''
     station.active(True)
     station.config(essid=ssid, password=password)
     print('connecting in AP mode...')
@@ -25,8 +26,8 @@ if AP:
 
 else:   
 
-    MY_SSID = 'senorita-fussy-bubbles' 
-    MY_PW = 'ic5D4CHJV0X3'
+    MY_SSID = 'enter your ssid' 
+    MY_PW = 'enter your password'
 
     station = network.WLAN(network.STA_IF)
     station.active(True)

@@ -36,6 +36,6 @@ function sendMessage(message) {
 
 function updateValues(data) {
   sensorData.unshift(data);
-  if (sensorData.length > 1) sensorData.pop();
+  if (sensorData.length > 5) sensorData.pop();
   sensorValues.value = sensorData.join("\r\n");
 }

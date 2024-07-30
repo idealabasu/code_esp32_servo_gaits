@@ -41,30 +41,30 @@ import time_based_servo
 # import time
 
 
-template = '''
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>URL Encoded Forms</title>
-  </head>
-  <body>
-    <form
-      action="/test"
-      method="GET"
-      enctype="application/x-www-form-urlencoded">
-      <p>LED:<input type="text" name="servoval" value="{led_value}" /></p>
-      <p>Frequency:<input type="text" name="frequency" value="{frequency}" /></p>
-      <p>Amplitude:<input type="text" name="amplitude" value="{amplitude}" /></p>
-      <p>Offset:<input type="text" name="offset" value="{offset}" /></p>
-      <p>L0:<input type="text" name="l0" value="{l0}" /></p>
-      <p>L1:<input type="text" name="l1" value="{l1}" /></p>
-      <p>L2:<input type="text" name="l2" value="{l2}" /></p>
-      <p>L3:<input type="text" name="l3" value="{l3}" /></p>
-      <p><input type="submit" value="Submit" /><p>
-    </form>
-  </body>
-</html>
-'''
+# template = '''
+# <!DOCTYPE html>
+# <html>
+#   <head>
+#     <title>URL Encoded Forms</title>
+#   </head>
+#   <body>
+#     <form
+#       action="/test"
+#       method="GET"
+#       enctype="application/x-www-form-urlencoded">
+#       <p>LED:<input type="text" name="servoval" value="{led_value}" /></p>
+#       <p>Frequency:<input type="text" name="frequency" value="{frequency}" /></p>
+#       <p>Amplitude:<input type="text" name="amplitude" value="{amplitude}" /></p>
+#       <p>Offset:<input type="text" name="offset" value="{offset}" /></p>
+#       <p>L0:<input type="text" name="l0" value="{l0}" /></p>
+#       <p>L1:<input type="text" name="l1" value="{l1}" /></p>
+#       <p>L2:<input type="text" name="l2" value="{l2}" /></p>
+#       <p>L3:<input type="text" name="l3" value="{l3}" /></p>
+#       <p><input type="submit" value="Submit" /><p>
+#     </form>
+#   </body>
+# </html>
+# '''
 
 
 app = microdot.microdot.Microdot()
@@ -78,9 +78,9 @@ microdot.microdot.Response.socket_read_timeout =0
 #     return html
 
 # root route
-@app.route('/')
-async def index(request):
-    return microdot.utemplate.Template('index.html').render()
+# @app.route('/')
+# async def index(request):
+#     return microdot.utemplate.Template('index.html').render()
 
 
 
@@ -91,7 +91,7 @@ async def read_sensor(request, ws):
 #         data = await ws.receive()
         time.sleep(.1)
         try:
-            await ws.send(str(time.time()))
+            await ws.send(str(time.time_ns()))
             # print('test')
         except ConnectionResetError:
             print("connection lost")
@@ -112,54 +112,64 @@ def shutdown(request):
     return 'The server is shutting down...'
 
 
-# led = Pin(2, Pin.OUT)
+led = Pin(2, Pin.OUT)
 
-# def set_servo(value):
-#     led.value(int(value))
+def set_servo(value):
+    led.value(int(value))
 
-#     print('setting servo value: ',value)
+    print('setting servo value: ',value)
 
-# def set_frequency(value):
-#     time_based_servo.f = float(value)
-#     print('setting f: ',value)
+def set_frequency(value):
+    time_based_servo.f = float(value)
+    print('setting f: ',value)
 
-# def set_amplitude(value):
-#     time_based_servo.A = float(value)
-#     print('setting f: ',value)
+def set_amplitude(value):
+    time_based_servo.A = float(value)
+    print('setting f: ',value)
 
-# def set_offset(value):
-#     time_based_servo.b = float(value)
-#     print('setting f: ',value)
+def set_offset(value):
+    time_based_servo.b = float(value)
+    print('setting f: ',value)
 
-# def set_l0(value):
-#     time_based_servo.l1 = float(value)
-#     print('setting f: ',value)
+def set_l0(value):
+    time_based_servo.l1 = float(value)
+    print('setting f: ',value)
 
-# def set_l1(value):
-#     time_based_servo.l2 = float(value)
-#     print('setting f: ',value)
+def set_l1(value):
+    time_based_servo.l2 = float(value)
+    print('setting f: ',value)
 
-# def set_l2(value):
-#     time_based_servo.l3 = float(value)
-#     print('setting f: ',value)
+def set_l2(value):
+    time_based_servo.l3 = float(value)
+    print('setting f: ',value)
 
-# def set_l3(value):
-#     time_based_servo.l4 = float(value)
-#     print('setting f: ',value)
+def set_l3(value):
+    time_based_servo.l4 = float(value)
+    print('setting f: ',value)
 
 
-# @app.get('/test')
-# async def servo(request):
-#     set_servo((int(request.args['servoval'])))
-#     set_frequency((request.args['frequency']))
-#     set_amplitude((request.args['amplitude']))
-#     set_offset((request.args['offset']))
-#     set_l0((request.args['l0']))
-#     set_l1((request.args['l1']))
-#     set_l2((request.args['l2']))
-#     set_l3((request.args['l3']))
-#     html = template.format(led_value= led.value(),frequency=time_based_servo.f, amplitude=time_based_servo.A, offset = time_based_servo.b, l0=time_based_servo.l1, l1 = time_based_servo.l2, l2 = time_based_servo.l3, l3 = time_based_servo.l4)
-#     return html
+@app.get('/')
+async def index(request):
+    try:
+        set_servo((int(request.args['servoval'])))
+        set_frequency((request.args['frequency']))
+        set_amplitude((request.args['amplitude']))
+        set_offset((request.args['offset']))
+        set_l0((request.args['l0']))
+        set_l1((request.args['l1']))
+        set_l2((request.args['l2']))
+        set_l3((request.args['l3']))
+    except KeyError:
+        set_servo(0)
+        set_frequency(1)
+        set_amplitude(90)
+        set_offset(90)
+        set_l0(0)
+        set_l1(.25)
+        set_l2(.5)
+        set_l3(.75)
+    # html = template.format(led_value= led.value(),frequency=time_based_servo.f, amplitude=time_based_servo.A, offset = time_based_servo.b, l0=time_based_servo.l1, l1 = time_based_servo.l2, l2 = time_based_servo.l3, l3 = time_based_servo.l4)
+    return microdot.utemplate.Template('index.html').render()
 
 def start_server():
     print('Starting microdot app')
