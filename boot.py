@@ -9,7 +9,9 @@ gc.collect()
 
 import network
 
-AP = True
+from settings import *
+
+AP = False
 
 if AP:
     station = network.WLAN(network.AP_IF)
@@ -26,8 +28,6 @@ if AP:
 
 else:   
 
-    MY_SSID = 'enter your ssid' 
-    MY_PW = 'enter your password'
 
     station = network.WLAN(network.STA_IF)
     station.active(True)
