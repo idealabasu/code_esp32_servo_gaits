@@ -34,38 +34,6 @@ from machine import Pin
 import time_based_servo
 
 
-# from microdot import Microdot, Response, send_file
-# from microdot.utemplate import Template
-# from microdot.websocket import with_websocket
-# from ldr_photoresistor_module import LDR
-# import time
-
-
-# template = '''
-# <!DOCTYPE html>
-# <html>
-#   <head>
-#     <title>URL Encoded Forms</title>
-#   </head>
-#   <body>
-#     <form
-#       action="/test"
-#       method="GET"
-#       enctype="application/x-www-form-urlencoded">
-#       <p>LED:<input type="text" name="servoval" value="{led_value}" /></p>
-#       <p>Frequency:<input type="text" name="frequency" value="{frequency}" /></p>
-#       <p>Amplitude:<input type="text" name="amplitude" value="{amplitude}" /></p>
-#       <p>Offset:<input type="text" name="offset" value="{offset}" /></p>
-#       <p>L0:<input type="text" name="l0" value="{l0}" /></p>
-#       <p>L1:<input type="text" name="l1" value="{l1}" /></p>
-#       <p>L2:<input type="text" name="l2" value="{l2}" /></p>
-#       <p>L3:<input type="text" name="l3" value="{l3}" /></p>
-#       <p><input type="submit" value="Submit" /><p>
-#     </form>
-#   </body>
-# </html>
-# '''
-
 
 app = microdot.microdot.Microdot()
 
@@ -82,19 +50,54 @@ microdot.microdot.Response.socket_read_timeout =0
 # async def index(request):
 #     return microdot.utemplate.Template('index.html').render()
 
+class ServoParams(object):
+    def __init__(self,f=1,a=180,b=0,l=0):
+        self.f = f
+        self.a = a
+        self.b = b
+        self.l = l
 
+    def get_params(self):
+        d = {}
+        d['a'] = self.a
+        d['b'] = self.b
+        d['f'] = self.f
+        d['l'] = self.l
+        return d
+
+    def set_params(self,dictionary1):
+        self.a = dictionary1['a']
+        self.b = dictionary1['b']
+        self.f = dictionary1['f']
+        self.l = dictionary1['l']
+
+
+servo1_params = ServoParams()
+
+import json
 
 @app.route('/ws')
 @microdot.websocket.with_websocket
 async def read_sensor(request, ws):
     while True:
-#         data = await ws.receive()
-        time.sleep(.1)
+        # time.sleep(1)
         try:
-            await ws.send(str(time.time_ns()))
+            data = await ws.receive()
+            print(data)
+            # await ws.send(str(time.time_ns()))
+            
+
             # print('test')
-        except ConnectionResetError:
-            print("connection lost")
+        except Exception as e:
+            print(e)
+
+@app.route('/sensordata')
+@microdot.websocket.with_websocket
+async def sensordata(request, ws):
+    for ssid in range(100):
+        data = {"sensor": str(ssid)} 
+        await ws.send(json.dumps(servo1_params.get_params()))
+        await asyncio.sleep(1)
 
 # Static CSS/JSS
 @app.route("/static/<path:path>")
@@ -169,7 +172,7 @@ async def index(request):
         set_l2(.5)
         set_l3(.75)
     # html = template.format(led_value= led.value(),frequency=time_based_servo.f, amplitude=time_based_servo.A, offset = time_based_servo.b, l0=time_based_servo.l1, l1 = time_based_servo.l2, l2 = time_based_servo.l3, l3 = time_based_servo.l4)
-    return microdot.utemplate.Template('index.html').render()
+    return microdot.utemplate.Template('index2.html').render()
 
 def start_server():
     print('Starting microdot app')
