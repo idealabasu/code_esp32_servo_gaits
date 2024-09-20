@@ -108,7 +108,7 @@ async def sensordata(request, ws):
     while True:
         data = await run_imu()
         await ws.send(json.dumps(data))
-        await asyncio.sleep(.25)
+        await asyncio.sleep(.5)
 
 # Static CSS/JSS
 @app.route("/static/<path:path>")
