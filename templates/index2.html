@@ -7,19 +7,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./static/index2.css">
     <link rel="icon" href="./static/favicon.png" type="image/png" />
-    <title>Minimlist chat App</title>
+    <title>Robot Control Interface</title>
 </head>
 
 <body>
+    <p> Amp: <a id="amp1">value</a></p>
+    <p> Freq: <a id="freq1">value</a></p>
+    <p> temp: <a id="temp1">value</a></p>
+    <p> ax: <a id="ax">value</a></p>
+    <p> ay: <a id="ay">value</a></p>
+    <p> az: <a id="az">value</a></p>
+    <p> wx: <a id="wx">value</a></p>
+    <p> wy: <a id="wy">value</a></p>
+    <p> wz: <a id="wz">value</a></p>
+
     <div class="container">
         <form id="msgForm" class="msgForm">
             <input name="amplitude" type="text" placeholder="amplitude" class="input" id="amplitude" />
             <input name="frequency" type="text" placeholder="frequency" class="input" id="frequency" />
             <input type="submit" class="btn" value="Send">
         </form>
-        <p class="msg">Log:</p>
-        <p id="log"></p>
-        <div id="messages" class="messages"></div>
     </div>
     <script type="text/javascript" src="static/mylibrary.js"></script>
 </body>
