@@ -32,18 +32,20 @@ ws.binaryType = "blob";
 ws.addEventListener("open", event => {console.log("Websocket connection opened");});
 ws.addEventListener("close", event => {console.log("Websocket connection closed");});
 ws.onmessage = function (message) {
-    const msgDiv = document.createElement('div');
-    msgDiv.classList.add('msgCtn');
-    if (message.data instanceof Blob) {
-        reader = new FileReader();
-        reader.onload = () => {
-            msgDiv.innerHTML = reader.result;
-            document.getElementById('messages').appendChild(msgDiv);
-        };
-    } else {
+    // const msgDiv = document.createElement('div');
+    // msgDiv.classList.add('msgCtn');
+    // if (message.data instanceof Blob) {
+        // reader = new FileReader();
+        // reader.onload = () => {
+            // msgDiv.innerHTML = reader.result;
+            // document.getElementById('messages').appendChild(msgDiv);
+        // };
+    // } else 
+    {
         console.log("message: " + message.data);
-        msgDiv.innerHTML = message.data;
-        document.getElementById('messages').appendChild(msgDiv);
+        // msgDiv.innerHTML = message.data;
+        document.getElementById('amplitude').value = message.data.a
+        document.getElementById('frequency').value = message.data.f
     }
 }
 

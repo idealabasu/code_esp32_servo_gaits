@@ -198,8 +198,6 @@ def websocket_wrapper(f, upgrade_function):
         ws = await upgrade_function(request)
         try:
             await f(request, ws, *args, **kwargs)
-        # except ConnectionResetError:
-            # print("custom connection lost")
         except OSError as exc:
             if exc.errno not in MUTED_SOCKET_ERRORS:  # pragma: no cover
                 raise

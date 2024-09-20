@@ -9,7 +9,7 @@ gc.collect()
 
 import network
 
-from settings import *
+from secrets import *
 
 AP = False
 
