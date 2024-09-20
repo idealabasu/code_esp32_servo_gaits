@@ -46,10 +46,3 @@ def update_servos():
     servo4.set_angle(y4)
     
 
-async def update_servo_loop():
-    ii = 0
-    while True:
-        # print(ii)
-        ii+=1
-        update_servos()
-        await asyncio.sleep(0.1)

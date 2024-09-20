@@ -93,11 +93,14 @@ async def run_imu():
 
 @app.route('/ws')
 @microdot.websocket.with_websocket
-async def read_sensor(request, ws):
+async def read_form(request, ws):
     while True:
         try:
             data = await ws.receive()
             await ws.send(data)
+            json_data = json.loads(data)
+            time_based_servo.A  = float(json_data['amplitude'])
+            time_based_servo.f  = float(json_data['frequency'])
             print(data)
         except Exception as e:
             print(e)
@@ -107,6 +110,7 @@ async def read_sensor(request, ws):
 async def sensordata(request, ws):
     while True:
         data = await run_imu()
+        # data = all_data[50]
         await ws.send(json.dumps(data))
         await asyncio.sleep(.5)
 
@@ -196,8 +200,28 @@ def start_server():
 
 # logger.info('getting down to servo task')
 
-# servo_task = asyncio.create_task(time_based_servo.update_servo_loop())
+async def update_servo_loop():
+    ii = 0
+    while True:
+        # print(ii)
+        ii+=1
+        update_servos()
+        await asyncio.sleep(0.01)
+
+servo_task = asyncio.create_task(time_based_servo.update_servo_loop())
     
+all_data = []
+
+async def get_imu():
+    global all_data
+    ii = 0
+    while True:
+        data = await run_imu()
+        all_data.append(data)
+        while len(all_data)>50:
+            all_data.pop(0)
+        await asyncio.sleep(0.1)
+
 
 # async def check_time():
 #     ii = 0
@@ -212,6 +236,7 @@ def start_server():
 # i2c = SoftI2C(scl=Pin(33), sda=Pin(32))
 
 # logger.info('starting app')
+
 
 start_server()
 
