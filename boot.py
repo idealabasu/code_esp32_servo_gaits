@@ -9,7 +9,6 @@ gc.collect()
 
 import network
 
-from secrets import *
 
 AP = True
 
@@ -28,6 +27,7 @@ if AP:
 
 else:   
 
+    from secrets import *
 
     station = network.WLAN(network.STA_IF)
     station.active(True)
