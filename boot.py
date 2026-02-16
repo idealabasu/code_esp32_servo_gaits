@@ -11,7 +11,7 @@ import network
 
 from secrets import *
 
-AP = False
+AP = True
 
 if AP:
     station = network.WLAN(network.AP_IF)
