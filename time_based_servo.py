@@ -1,6 +1,4 @@
 #import all the libraries
-# from machine import Pin
-# from machine import PWM
 import math
 import time
 import my_servo

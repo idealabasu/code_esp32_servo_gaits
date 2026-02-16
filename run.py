@@ -7,18 +7,11 @@ import time_based_servo
 # https://randomnerdtutorials.com/micropython-ssd1306-oled-scroll-shapes-esp32-esp8266/
 # https://randomnerdtutorials.com/micropython-oled-display-esp32-esp8266/
 
+import sys
+sys.path.insert(0,'/code/lib')
 
 
-
-import machine
-from machine import Pin
-from machine import SoftI2C
 import time
-
-i2c = machine.I2C(0, sda=machine.Pin(32), scl=machine.Pin(33))  # EIO error almost immediately
-from bno055.bno055 import BNO055
-imu = BNO055(i2c)
-calibrated = False
 
 import micropython
 
@@ -37,7 +30,6 @@ import microdot.utemplate
 import microdot.websocket
 # from microdot.microdot import Microdot, Response, send_file
 
-from machine import Pin
 import time_based_servo
 
 
@@ -83,12 +75,13 @@ servo1_params = ServoParams()
 
 import json
 
+import random
 
 async def run_imu():
     data = {}
-    data['temp'] = imu.temperature()
-    data['gyro'] = imu.gyro()
-    data['accel'] = imu.accel()
+    data['temp'] = random.randint(0,0b1111111111)
+    data['gyro'] = random.randint(0,0b1111111111)
+    data['accel'] = random.randint(0,0b1111111111)
     return data
 
 @app.route('/ws')
@@ -130,7 +123,6 @@ def shutdown(request):
     return 'The server is shutting down...'
 
 
-led = Pin(2, Pin.OUT)
 
 # def set_servo(value):
 #     led.value(int(value))
@@ -194,7 +186,7 @@ async def index(request):
 def start_server():
     print('Starting microdot app')
     try:
-        app.run(port=80)
+        app.run(port=5000)
     except:
         app.shutdown()
 
@@ -205,10 +197,10 @@ async def update_servo_loop():
     while True:
         # print(ii)
         ii+=1
-        update_servos()
+        time_based_servo.update_servos()
         await asyncio.sleep(0.01)
 
-servo_task = asyncio.create_task(time_based_servo.update_servo_loop())
+servo_task = asyncio.create_task(update_servo_loop())
     
 all_data = []
 
@@ -221,21 +213,6 @@ async def get_imu():
         while len(all_data)>50:
             all_data.pop(0)
         await asyncio.sleep(0.1)
-
-
-# async def check_time():
-#     ii = 0
-#     while True:
-#         # print(ii)
-#         ii+=1
-#         await asyncio.sleep(0.5)
-
-# time_task = asyncio.create_task(check_time())
-
-
-# i2c = SoftI2C(scl=Pin(33), sda=Pin(32))
-
-# logger.info('starting app')
 
 
 start_server()

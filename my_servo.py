@@ -1,5 +1,3 @@
-from machine import Pin
-from machine import PWM
 
 import time
 import math
@@ -31,14 +29,20 @@ def time_based_sinusoid(t,A,f,b,l0=0):
     y = A*(math.sin((2*(f*t-l0))*math.pi)) + b
     return y
 
+class PWM(object):
+    def __init__(self,*args,**kwargs):
+        self.args = args
+        self.kwargs = kwargs
+    def duty(*args,**kwargs):
+        pass
+
 class Servo(object):
     def __init__(self,pwm_pin, frequency=50,range_low_us=550, range_high_us=2400,pwm_bits = 10, input_range=180):
         self.frequency = frequency
         self.pwm_limit_low = range_low_us/1e6*frequency*(2**pwm_bits)
         self.pwm_limit_high = range_high_us/1e6*frequency*(2**pwm_bits)
         self.input_range = input_range
-        # self.pwm = PWM(Pin(pwm_pin), self.frequency, resolution = pwm_bits)
-        self.pwm = PWM(Pin(pwm_pin), self.frequency)
+        self.pwm = PWM()
 
     def angle_to_pwm(self,degrees):
         '''
