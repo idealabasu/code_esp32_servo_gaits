@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>MicroPython WebSocket</title>
+    <link rel="stylesheet" href="static/index.css" />
+    <link rel="icon" href="./favicon.ico" type="image/x-icon" />
+    <!-- <script src="https://cdn.plot.ly/plotly-2.16.1.min.js"></script> -->
+  </head>
+  <body>
+    <h1>MicroPython WebSocket</h1>
+      <main>
+        <div>
+        <h2>Real time values</h2>
+        <textarea
+          id="sensor-values"
+          name=""
+          cols="15"
+          rows="5"
+        ></textarea>
+        <form
+        action="/"
+        method="GET"
+        enctype="application/x-www-form-urlencoded">
+        <p>LED:<input type="text" name="servoval" value="0" /></p>
+        <p>Frequency:<input type="text" name="frequency" value="1" /></p>
+        <p>Amplitude:<input type="text" name="amplitude" value="90" /></p>
+        <p>Offset:<input type="text" name="offset" value="90" /></p>
+        <p>L0:<input type="text" name="l0" value="0" /></p>
+        <p>L1:<input type="text" name="l1" value=".25" /></p>
+        <p>L2:<input type="text" name="l2" value=".5" /></p>
+        <p>L3:<input type="text" name="l3" value=".75" /></p>
+        <p><input type="submit" value="Submit" /><p>
+      </form>
+  
+    </div>
+      </main>
+    <script src="static/index.js"></script>
+  </body>
+</html>
