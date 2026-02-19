@@ -180,15 +180,15 @@ def start_server():
 
 # logger.info('getting down to servo task')
 
-# servo_task = asyncio.create_task(time_based_servo.update_servo_loop())
+servo_task = asyncio.create_task(time_based_servo.update_servo_loop())
     
 
-async def check_time():
-    ii = 0
-    while True:
-        # print(ii)
-        ii+=1
-        await asyncio.sleep(0.5)
+# async def check_time():
+#     ii = 0
+#     while True:
+#         # print(ii)
+#         ii+=1
+#         await asyncio.sleep(0.5)
 
 # time_task = asyncio.create_task(check_time())
 
